@@ -4,9 +4,6 @@ let {init, Sprite, GameLoop} = kontra;
 
 let {canvas, context} = init();
 
-function draw_ground() {
-}
-
 let ground = Sprite({
 	x: 0,
 	y: 0,
