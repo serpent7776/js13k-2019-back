@@ -5,6 +5,7 @@ let {init, Sprite, GameLoop} = kontra;
 let {canvas, context} = init();
 
 kontra.setImagePath('../gfx/');
+kontra.initKeys();
 
 kontra.load('player.png').then(_ => {
 	let charsSheet = kontra.SpriteSheet({
@@ -23,11 +24,27 @@ kontra.load('player.png').then(_ => {
 		y: 100,
 		width: 18,
 		height: 20,
+		movement_speed: 64,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
 		},
 		animations: charsSheet.animations,
+		update: function(dt) {
+			if (kontra.keyPressed('up')) {
+				this.y -= this.movement_speed * dt;
+			}
+			if (kontra.keyPressed('down')) {
+				this.y += this.movement_speed * dt;
+			}
+			if (kontra.keyPressed('left')) {
+				this.x -= this.movement_speed * dt;
+			}
+			if (kontra.keyPressed('right')) {
+				this.x += this.movement_speed * dt;
+			}
+			this.advance(dt);
+		}
 	});
 	player.playAnimation('walk');
 	let ground = Sprite({
@@ -60,9 +77,9 @@ kontra.load('player.png').then(_ => {
 	});
 
 	let loop = GameLoop({
-		update: function() {
-			ground.update();
-			player.update();
+		update: function(dt) {
+			ground.update(dt);
+			player.update(dt);
 		},
 		render: function() {
 			ground.render();
