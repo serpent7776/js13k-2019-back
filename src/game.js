@@ -29,8 +29,6 @@ kontra.load('player.png').then(_ => {
 	let player = kontra.Sprite({
 		x: screenWidth / 2,
 		y: screenHeight / 2,
-		width: 18,
-		height: 20,
 		movement_speed: 32,
 		anchor: {
 			x: 0.5,
