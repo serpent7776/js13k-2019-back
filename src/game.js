@@ -10,7 +10,7 @@ kontra.initKeys();
 let screenWidth = kontra.getCanvas().width;
 let screenHeight = kontra.getCanvas().height;
 
-kontra.load('player.png').then(_ => {
+kontra.load('player.png', 'vignette.png').then(_ => {
 	let charsSheet = kontra.SpriteSheet({
 		image: kontra.imageAssets.player,
 		frameWidth: 18,
@@ -82,15 +82,28 @@ kontra.load('player.png').then(_ => {
 			}
 		}
 	});
+	let vignette = Sprite({
+		x: screenWidth / 2,
+		y: screenHeight / 2,
+		width: screenWidth,
+		height: screenWidth,
+		anchor: {
+			x: 0.5,
+			y: 0.5,
+		},
+		image: kontra.imageAssets.vignette,
+	});
 
 	let loop = GameLoop({
 		update: function(dt) {
 			ground.update(dt);
 			player.update(dt);
+			vignette.update(dt);
 		},
 		render: function() {
 			ground.render();
 			player.render();
+			vignette.render();
 		},
 	});
 
