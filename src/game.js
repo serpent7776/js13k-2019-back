@@ -84,25 +84,28 @@ kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
 		width: 640,
 		height: 480,
 		calc_ground_tile_color: function(x, y) {
-			let sx = k => Math.sin(x * k);
-			let sy = k => Math.cos(y * k);
-			let h = 120 + 25 * (sx(1) * sy(1));
-			let s = 100 - 7 * (sx(1.5) + sy(1.7)) / 2;
-			let l = 45 + 2.5 * (sx(360) + sy(420)) / 2;
+			let sq = k => (k|0) % 2;
+			let h = (sq(x) + sq(y)) % 2 ? 120 : 90;
+			let s = 100;
+			let l = 50;
 			return {h: h, s: s, l:l};
 		},
 		render: function() {
 			let ts = this.tile_size;
-			for (let ty = 0; ty < this.width; ty += ts) {
-				for (let tx = 0; tx < this.width; tx += ts) {
-					let x = tx + camera.x;
-					let y = ty + camera.y;
-					let {h, s, l} = this.calc_ground_tile_color(x, y);
+			let tiles_x = this.width / ts;
+			let tiles_y = this.height / ts;
+			for (let ty = 0; ty <= tiles_y; ty++) {
+				for (let tx = 0; tx <= tiles_x; tx++) {
+					let px = (player.x | 0) / ts;
+					let py = (player.y | 0) / ts;
+					let dx = (player.x | 0) % ts;
+					let dy = (player.y | 0) % ts;
+					let {h, s, l} = this.calc_ground_tile_color(tx + px, ty + py);
 					this.context.fillStyle = `hsl(${h}, ${s}%, ${l}%)`;
-					this.context.fillRect(tx, ty, ts, ts);
+					this.context.fillRect(tx * ts - dx, ty * ts - dy, ts, ts);
 					this.context.strokeStyle = '#999';
 					this.context.lineWidth = 1;
-					this.context.strokeRect(tx, ty, ts, ts);
+					this.context.strokeRect(tx * ts - dx, ty * ts - dy, ts, ts);
 				}
 			}
 		}
