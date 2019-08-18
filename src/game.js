@@ -124,7 +124,7 @@ kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
 		update: function(dt) {
 			let delta = 5 * (1 + Math.sin(this.range_counter++ / 20));
 			this.width = screenWidth + delta;
-			this.height = screenWidth + delta;
+			this.height = screenHeight + delta;
 			this.advance(dt);
 		},
 	});
