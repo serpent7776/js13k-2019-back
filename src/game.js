@@ -10,7 +10,7 @@ kontra.initKeys();
 let screenWidth = kontra.getCanvas().width;
 let screenHeight = kontra.getCanvas().height;
 
-kontra.load('player.png', 'vignette.png').then(_ => {
+kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
 	function render_thing() {
 		this.context.save();
 		this.context.translate(-player.x + screenWidth / 2, -player.y + screenHeight / 2);
@@ -28,7 +28,18 @@ kontra.load('player.png', 'vignette.png').then(_ => {
 			},
 		},
 	});
-	let player = kontra.Sprite({
+	let skeletonSheet = kontra.SpriteSheet({
+		image: kontra.imageAssets.skeleton,
+		frameWidth: 24,
+		frameHeight: 32,
+		animations: {
+			walk: {
+				frames: '6..8',
+				frameRate: 6,
+			},
+		},
+	});
+	let player = Sprite({
 		x: 0,
 		y: 0,
 		movement_speed: 32,
@@ -55,6 +66,17 @@ kontra.load('player.png', 'vignette.png').then(_ => {
 		render: render_thing,
 	});
 	player.playAnimation('walk');
+	let skel = Sprite({
+		x: 40,
+		y: 40,
+		anchor: {
+			x: 0.5,
+			y: 0.5,
+		},
+		animations: skeletonSheet.animations,
+		render: render_thing,
+	});
+	skel.playAnimation('walk');
 	let ground = Sprite({
 		x: 0,
 		y: 0,
@@ -108,11 +130,13 @@ kontra.load('player.png', 'vignette.png').then(_ => {
 		update: function(dt) {
 			ground.update(dt);
 			player.update(dt);
+			skel.update(dt);
 			vignette.update(dt);
 		},
 		render: function() {
 			ground.render();
 			player.render();
+			skel.render();
 			vignette.render();
 		},
 	});
