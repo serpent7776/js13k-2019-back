@@ -42,7 +42,7 @@ kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
 	let player = Sprite({
 		x: 4800,
 		y: 4800,
-		movement_speed: 32,
+		movement_speed: 64,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
