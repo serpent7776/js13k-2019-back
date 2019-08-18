@@ -11,6 +11,12 @@ let screenWidth = kontra.getCanvas().width;
 let screenHeight = kontra.getCanvas().height;
 
 kontra.load('player.png', 'vignette.png').then(_ => {
+	function render_thing() {
+		this.context.save();
+		this.context.translate(-player.x + screenWidth / 2, -player.y + screenHeight / 2);
+		this.draw();
+		this.context.restore();
+	}
 	let charsSheet = kontra.SpriteSheet({
 		image: kontra.imageAssets.player,
 		frameWidth: 18,
@@ -22,13 +28,9 @@ kontra.load('player.png', 'vignette.png').then(_ => {
 			},
 		},
 	});
-	let camera = {
+	let player = kontra.Sprite({
 		x: 0,
 		y: 0,
-	};
-	let player = kontra.Sprite({
-		x: screenWidth / 2,
-		y: screenHeight / 2,
 		movement_speed: 32,
 		anchor: {
 			x: 0.5,
@@ -37,19 +39,20 @@ kontra.load('player.png', 'vignette.png').then(_ => {
 		animations: charsSheet.animations,
 		update: function(dt) {
 			if (kontra.keyPressed('up')) {
-				camera.y -= this.movement_speed * dt;
+				this.y -= this.movement_speed * dt;
 			}
 			if (kontra.keyPressed('down')) {
-				camera.y += this.movement_speed * dt;
+				this.y += this.movement_speed * dt;
 			}
 			if (kontra.keyPressed('left')) {
-				camera.x -= this.movement_speed * dt;
+				this.x -= this.movement_speed * dt;
 			}
 			if (kontra.keyPressed('right')) {
-				camera.x += this.movement_speed * dt;
+				this.x += this.movement_speed * dt;
 			}
 			this.advance(dt);
-		}
+		},
+		render: render_thing,
 	});
 	player.playAnimation('walk');
 	let ground = Sprite({
