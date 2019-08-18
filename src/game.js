@@ -87,11 +87,29 @@ kontra.load('player.png', 'vignette.png').then(_ => {
 		y: screenHeight / 2,
 		width: screenWidth,
 		height: screenWidth,
+		range: 0,
+		range_counter: 0,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
 		},
 		image: kontra.imageAssets.vignette,
+		update: function(dt) {
+			this.range = 5 * (1 + Math.sin(this.range_counter++ / 20));
+			this.advance(dt);
+		},
+		render: function() {
+			let anchorWidth = -(this.width + this.range) * this.anchor.x;
+			let anchorHeight = -(this.height + this.range) * this.anchor.y;
+			this.context.save();
+			this.context.translate(this.x, this.y);
+			this.context.rotate(this.rotation);
+			this.context.drawImage(
+				this.image, 0, 0, this.image.width, this.image.height,
+				anchorWidth, anchorHeight, this.width + this.range, this.height + this.range
+			);
+			this.context.restore();
+		},
 	});
 
 	let loop = GameLoop({
