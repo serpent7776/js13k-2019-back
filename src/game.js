@@ -40,8 +40,8 @@ kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
 		},
 	});
 	let player = Sprite({
-		x: 0,
-		y: 0,
+		x: 4800,
+		y: 4800,
 		movement_speed: 32,
 		anchor: {
 			x: 0.5,
@@ -67,8 +67,8 @@ kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
 	});
 	player.playAnimation('walk');
 	let skel = Sprite({
-		x: 40,
-		y: 40,
+		x: 4840,
+		y: 4840,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
