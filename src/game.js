@@ -10,7 +10,7 @@ kontra.initKeys();
 let screenWidth = kontra.getCanvas().width;
 let screenHeight = kontra.getCanvas().height;
 
-kontra.load('player.png', 'vignette.png', 'skeleton.png').then(_ => {
+kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
 		this.context.save();
 		this.context.translate(-player.x + screenWidth / 2, -player.y + screenHeight / 2);
