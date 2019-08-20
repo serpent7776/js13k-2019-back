@@ -49,17 +49,19 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		},
 		animations: charsSheet.animations,
 		update: function(dt) {
+			this.dx = 0;
+			this.dy = 0;
 			if (kontra.keyPressed('up')) {
-				this.y -= this.movement_speed * dt;
+				this.dy = -this.movement_speed;
 			}
 			if (kontra.keyPressed('down')) {
-				this.y += this.movement_speed * dt;
+				this.dy = this.movement_speed;
 			}
 			if (kontra.keyPressed('left')) {
-				this.x -= this.movement_speed * dt;
+				this.dx = -this.movement_speed;
 			}
 			if (kontra.keyPressed('right')) {
-				this.x += this.movement_speed * dt;
+				this.dx = this.movement_speed;
 			}
 			this.advance(dt);
 		},
