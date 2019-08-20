@@ -69,11 +69,24 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	let skel = Sprite({
 		x: 4840,
 		y: 4840,
+		movement_speed: 32,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
 		},
 		animations: skeletonSheet.animations,
+		update: function(dt) {
+			let dx = (((player.x - this.x)) / ground.tile_size)|0;
+			let dy = (((player.y - this.y)) / ground.tile_size)|0;
+			if (Math.abs(dx) >= Math.abs(dy)) {
+				this.dx = dx / Math.abs(dx) * this.movement_speed;
+				this.dy = 0;
+			} else {
+				this.dy = dy / Math.abs(dy) * this.movement_speed;
+				this.dx = 0;
+			}
+			this.advance(dt);
+		},
 		render: render_thing,
 	});
 	skel.playAnimation('walk');
