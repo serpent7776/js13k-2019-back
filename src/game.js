@@ -72,6 +72,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		x: 4840,
 		y: 4840,
 		movement_speed: 32,
+		attack_range: 1,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
@@ -88,8 +89,19 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				this.dx = 0;
 			}
 			this.advance(dt);
+			if (this.is_in_range(player)) {
+				this.attack(player);
+			}
 		},
 		render: render_thing,
+		is_in_range: function(thing) {
+			let dx = (((player.x - this.x)) / ground.tile_size)|0;
+			let dy = (((player.y - this.y)) / ground.tile_size)|0;
+			return Math.abs(dx) + Math.abs(dy) < this.attack_range;
+		},
+		attack: function(thing) {
+			console.log('attack');
+		},
 	});
 	skel.playAnimation('walk');
 	let ground = Sprite({
