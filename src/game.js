@@ -43,6 +43,9 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		x: 4800,
 		y: 4800,
 		movement_speed: 64,
+		knockback: 256,
+		kx: 0,
+		ky: 0,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
@@ -63,9 +66,23 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			if (kontra.keyPressed('right')) {
 				this.dx = this.movement_speed;
 			}
+			this.dx += this.kx;
+			this.dy += this.ky;
 			this.advance(dt);
+			this.kx *= 0.9;
+			this.ky *= 0.9;
 		},
 		render: render_thing,
+		hit: function(attacker) {
+			let dx = this.x - attacker.x;
+			let dy = this.y - attacker.y;
+			let len = Math.sqrt(dx*dx + dy*dy);
+			let k = this.knockback;
+			let vx = dx * k / len;
+			let vy = dy * k / len;
+			this.kx = vx;
+			this.ky = vy;
+		}
 	});
 	player.playAnimation('walk');
 	let skel = Sprite({
@@ -90,7 +107,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			}
 			this.advance(dt);
 			if (this.is_in_range(player)) {
-				this.attack(player);
+				player.hit(this);
 			}
 		},
 		render: render_thing,
