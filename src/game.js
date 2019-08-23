@@ -85,42 +85,49 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		}
 	});
 	player.playAnimation('walk');
-	let skel = Sprite({
+	let skelPool = kontra.Pool({
+		maxSize: 100,
+		create: function() {
+			let skel = Sprite({
+				movement_speed: 32,
+				attack_range: 1,
+				animations: skeletonSheet.animations,
+				update: function(dt) {
+					let dx = (((player.x - this.x)) / ground.tile_size)|0;
+					let dy = (((player.y - this.y)) / ground.tile_size)|0;
+					if (Math.abs(dx) >= Math.abs(dy)) {
+						this.dx = dx / Math.abs(dx) * this.movement_speed;
+						this.dy = 0;
+					} else {
+						this.dy = dy / Math.abs(dy) * this.movement_speed;
+						this.dx = 0;
+					}
+					this.advance(dt);
+					if (this.is_in_range(player)) {
+						player.hit(this);
+					}
+				},
+				render: render_thing,
+				is_in_range: function(thing) {
+					let dx = (((player.x - this.x)) / ground.tile_size)|0;
+					let dy = (((player.y - this.y)) / ground.tile_size)|0;
+					return Math.abs(dx) + Math.abs(dy) < this.attack_range;
+				},
+			});
+			skel.playAnimation('walk');
+			return skel;
+		},
+	});
+	skelPool.get({
 		x: 4840,
 		y: 4840,
-		movement_speed: 32,
-		attack_range: 1,
+		width: 24,
+		height: 32,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
 		},
-		animations: skeletonSheet.animations,
-		update: function(dt) {
-			let dx = (((player.x - this.x)) / ground.tile_size)|0;
-			let dy = (((player.y - this.y)) / ground.tile_size)|0;
-			if (Math.abs(dx) >= Math.abs(dy)) {
-				this.dx = dx / Math.abs(dx) * this.movement_speed;
-				this.dy = 0;
-			} else {
-				this.dy = dy / Math.abs(dy) * this.movement_speed;
-				this.dx = 0;
-			}
-			this.advance(dt);
-			if (this.is_in_range(player)) {
-				player.hit(this);
-			}
-		},
-		render: render_thing,
-		is_in_range: function(thing) {
-			let dx = (((player.x - this.x)) / ground.tile_size)|0;
-			let dy = (((player.y - this.y)) / ground.tile_size)|0;
-			return Math.abs(dx) + Math.abs(dy) < this.attack_range;
-		},
-		attack: function(thing) {
-			console.log('attack');
-		},
 	});
-	skel.playAnimation('walk');
 	let ground = Sprite({
 		x: 0,
 		y: 0,
@@ -177,13 +184,13 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		update: function(dt) {
 			ground.update(dt);
 			player.update(dt);
-			skel.update(dt);
+			skelPool.update(dt);
 			vignette.update(dt);
 		},
 		render: function() {
 			ground.render();
 			player.render();
-			skel.render();
+			skelPool.render();
 			vignette.render();
 		},
 	});
