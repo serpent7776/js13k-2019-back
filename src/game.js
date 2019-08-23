@@ -118,16 +118,18 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			return skel;
 		},
 	});
-	skelPool.get({
-		x: 4840,
-		y: 4840,
-		width: 24,
-		height: 32,
-		anchor: {
-			x: 0.5,
-			y: 0.5,
-		},
-	});
+	setInterval(() => {
+		skelPool.get({
+			x: 4840,
+			y: 4840,
+			width: 24,
+			height: 32,
+			anchor: {
+				x: 0.5,
+				y: 0.5,
+			},
+		});
+	}, 5000);
 	let ground = Sprite({
 		x: 0,
 		y: 0,
