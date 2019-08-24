@@ -9,6 +9,7 @@ kontra.initKeys();
 
 let screenWidth = kontra.getCanvas().width;
 let screenHeight = kontra.getCanvas().height;
+let worldCenter = 4800;
 
 kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
@@ -40,8 +41,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		},
 	});
 	let player = Sprite({
-		x: 4800,
-		y: 4800,
+		x: worldCenter,
+		y: worldCenter,
 		movement_speed: 64,
 		knockback: 256,
 		kx: 0,
@@ -120,8 +121,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	});
 	setInterval(() => {
 		skelPool.get({
-			x: 4840,
-			y: 4840,
+			x: worldCenter + 40,
+			y: worldCenter + 40,
 			width: 24,
 			height: 32,
 			anchor: {
