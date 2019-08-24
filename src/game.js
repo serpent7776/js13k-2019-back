@@ -11,6 +11,7 @@ const screenWidth = kontra.getCanvas().width;
 const screenHeight = kontra.getCanvas().height;
 const worldCenter = 4800;
 const farthestTile = 40;
+const tileSize = 20;
 
 kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
@@ -95,8 +96,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				attack_range: 1,
 				animations: skeletonSheet.animations,
 				update: function(dt) {
-					const dx = (((player.x - this.x)) / ground.tile_size)|0;
-					const dy = (((player.y - this.y)) / ground.tile_size)|0;
+					const dx = (((player.x - this.x)) / tileSize)|0;
+					const dy = (((player.y - this.y)) / tileSize)|0;
 					if (Math.abs(dx) >= Math.abs(dy)) {
 						this.dx = dx / Math.abs(dx) * this.movement_speed;
 						this.dy = 0;
@@ -111,8 +112,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				},
 				render: render_thing,
 				is_in_range: function(thing) {
-					const dx = (((player.x - this.x)) / ground.tile_size)|0;
-					const dy = (((player.y - this.y)) / ground.tile_size)|0;
+					const dx = (((player.x - this.x)) / tileSize)|0;
+					const dy = (((player.y - this.y)) / tileSize)|0;
 					return Math.abs(dx) + Math.abs(dy) < this.attack_range;
 				},
 			});
@@ -135,13 +136,11 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	let ground = Sprite({
 		x: 0,
 		y: 0,
-		tile_size: 20,
 		width: 640,
 		height: 480,
 		calc_ground_tile_color: function(tx, ty) {
 			const sq = k => (k|0) % 2;
-			const ts = this.tile_size;
-			const centralTile = worldCenter / ts;
+			const centralTile = worldCenter / tileSize;
 			const h = (sq(tx) + sq(ty)) % 2 ? 120 : 90;
 			const d = Math.abs(tx - centralTile) + Math.abs(ty - centralTile);
 			const s = 100 * (1 - Math.min(d / farthestTile, 1));
@@ -149,7 +148,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			return {h: h, s: s, l:l};
 		},
 		render: function() {
-			const ts = this.tile_size;
+			const ts = tileSize;
 			const tiles_x = this.width / ts;
 			const tiles_y = this.height / ts;
 			const offset_x = tiles_x / 2;
