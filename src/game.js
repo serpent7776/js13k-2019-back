@@ -10,6 +10,7 @@ kontra.initKeys();
 const screenWidth = kontra.getCanvas().width;
 const screenHeight = kontra.getCanvas().height;
 const worldCenter = 4800;
+const farthestTile = 40;
 
 kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
@@ -137,10 +138,13 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		tile_size: 20,
 		width: 640,
 		height: 480,
-		calc_ground_tile_color: function(x, y) {
+		calc_ground_tile_color: function(tx, ty) {
 			const sq = k => (k|0) % 2;
-			const h = (sq(x) + sq(y)) % 2 ? 120 : 90;
-			const s = 100;
+			const ts = this.tile_size;
+			const centralTile = worldCenter / ts;
+			const h = (sq(tx) + sq(ty)) % 2 ? 120 : 90;
+			const d = Math.abs(tx - centralTile) + Math.abs(ty - centralTile);
+			const s = 100 * (1 - Math.min(d / farthestTile, 1));
 			const l = 50;
 			return {h: h, s: s, l:l};
 		},
@@ -148,13 +152,15 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			const ts = this.tile_size;
 			const tiles_x = this.width / ts;
 			const tiles_y = this.height / ts;
+			const offset_x = tiles_x / 2;
+			const offset_y = tiles_y / 2;
 			const px = (player.x | 0) / ts;
 			const py = (player.y | 0) / ts;
 			const dx = (player.x | 0) % ts;
 			const dy = (player.y | 0) % ts;
 			for (let ty = 0; ty <= tiles_y; ty++) {
 				for (let tx = 0; tx <= tiles_x; tx++) {
-					const {h, s, l} = this.calc_ground_tile_color(tx + px, ty + py);
+					const {h, s, l} = this.calc_ground_tile_color(tx + px - offset_x, ty + py - offset_y);
 					this.context.fillStyle = `hsl(${h}, ${s}%, ${l}%)`;
 					this.context.fillRect(tx * ts - dx, ty * ts - dy, ts, ts);
 					this.context.strokeStyle = '#999';
