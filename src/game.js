@@ -148,12 +148,12 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			const ts = this.tile_size;
 			const tiles_x = this.width / ts;
 			const tiles_y = this.height / ts;
+			const px = (player.x | 0) / ts;
+			const py = (player.y | 0) / ts;
+			const dx = (player.x | 0) % ts;
+			const dy = (player.y | 0) % ts;
 			for (let ty = 0; ty <= tiles_y; ty++) {
 				for (let tx = 0; tx <= tiles_x; tx++) {
-					const px = (player.x | 0) / ts;
-					const py = (player.y | 0) / ts;
-					const dx = (player.x | 0) % ts;
-					const dy = (player.y | 0) % ts;
 					const {h, s, l} = this.calc_ground_tile_color(tx + px, ty + py);
 					this.context.fillStyle = `hsl(${h}, ${s}%, ${l}%)`;
 					this.context.fillRect(tx * ts - dx, ty * ts - dy, ts, ts);
