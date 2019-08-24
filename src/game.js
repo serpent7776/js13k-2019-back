@@ -7,9 +7,9 @@ let {canvas, context} = init();
 kontra.setImagePath('../gfx/');
 kontra.initKeys();
 
-let screenWidth = kontra.getCanvas().width;
-let screenHeight = kontra.getCanvas().height;
-let worldCenter = 4800;
+const screenWidth = kontra.getCanvas().width;
+const screenHeight = kontra.getCanvas().height;
+const worldCenter = 4800;
 
 kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
@@ -18,7 +18,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		this.draw();
 		this.context.restore();
 	}
-	let charsSheet = kontra.SpriteSheet({
+	const charsSheet = kontra.SpriteSheet({
 		image: kontra.imageAssets.player,
 		frameWidth: 18,
 		frameHeight: 20,
@@ -29,7 +29,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			},
 		},
 	});
-	let skeletonSheet = kontra.SpriteSheet({
+	const skeletonSheet = kontra.SpriteSheet({
 		image: kontra.imageAssets.skeleton,
 		frameWidth: 24,
 		frameHeight: 32,
@@ -75,12 +75,12 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		},
 		render: render_thing,
 		hit: function(attacker) {
-			let dx = this.x - attacker.x;
-			let dy = this.y - attacker.y;
-			let len = Math.sqrt(dx*dx + dy*dy);
-			let k = this.knockback;
-			let vx = dx * k / len;
-			let vy = dy * k / len;
+			const dx = this.x - attacker.x;
+			const dy = this.y - attacker.y;
+			const len = Math.sqrt(dx*dx + dy*dy);
+			const k = this.knockback;
+			const vx = dx * k / len;
+			const vy = dy * k / len;
 			this.kx = vx;
 			this.ky = vy;
 		}
@@ -94,8 +94,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				attack_range: 1,
 				animations: skeletonSheet.animations,
 				update: function(dt) {
-					let dx = (((player.x - this.x)) / ground.tile_size)|0;
-					let dy = (((player.y - this.y)) / ground.tile_size)|0;
+					const dx = (((player.x - this.x)) / ground.tile_size)|0;
+					const dy = (((player.y - this.y)) / ground.tile_size)|0;
 					if (Math.abs(dx) >= Math.abs(dy)) {
 						this.dx = dx / Math.abs(dx) * this.movement_speed;
 						this.dy = 0;
@@ -110,8 +110,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				},
 				render: render_thing,
 				is_in_range: function(thing) {
-					let dx = (((player.x - this.x)) / ground.tile_size)|0;
-					let dy = (((player.y - this.y)) / ground.tile_size)|0;
+					const dx = (((player.x - this.x)) / ground.tile_size)|0;
+					const dy = (((player.y - this.y)) / ground.tile_size)|0;
 					return Math.abs(dx) + Math.abs(dy) < this.attack_range;
 				},
 			});
@@ -138,23 +138,23 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		width: 640,
 		height: 480,
 		calc_ground_tile_color: function(x, y) {
-			let sq = k => (k|0) % 2;
-			let h = (sq(x) + sq(y)) % 2 ? 120 : 90;
-			let s = 100;
-			let l = 50;
+			const sq = k => (k|0) % 2;
+			const h = (sq(x) + sq(y)) % 2 ? 120 : 90;
+			const s = 100;
+			const l = 50;
 			return {h: h, s: s, l:l};
 		},
 		render: function() {
-			let ts = this.tile_size;
-			let tiles_x = this.width / ts;
-			let tiles_y = this.height / ts;
+			const ts = this.tile_size;
+			const tiles_x = this.width / ts;
+			const tiles_y = this.height / ts;
 			for (let ty = 0; ty <= tiles_y; ty++) {
 				for (let tx = 0; tx <= tiles_x; tx++) {
-					let px = (player.x | 0) / ts;
-					let py = (player.y | 0) / ts;
-					let dx = (player.x | 0) % ts;
-					let dy = (player.y | 0) % ts;
-					let {h, s, l} = this.calc_ground_tile_color(tx + px, ty + py);
+					const px = (player.x | 0) / ts;
+					const py = (player.y | 0) / ts;
+					const dx = (player.x | 0) % ts;
+					const dy = (player.y | 0) % ts;
+					const {h, s, l} = this.calc_ground_tile_color(tx + px, ty + py);
 					this.context.fillStyle = `hsl(${h}, ${s}%, ${l}%)`;
 					this.context.fillRect(tx * ts - dx, ty * ts - dy, ts, ts);
 					this.context.strokeStyle = '#999';
@@ -176,7 +176,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		},
 		image: kontra.imageAssets.vignette,
 		update: function(dt) {
-			let delta = 5 * (1 + Math.sin(this.range_counter++ / 20));
+			const delta = 5 * (1 + Math.sin(this.range_counter++ / 20));
 			this.width = screenWidth + delta;
 			this.height = screenHeight + delta;
 			this.advance(dt);
