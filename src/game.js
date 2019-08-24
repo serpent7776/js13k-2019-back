@@ -10,8 +10,9 @@ kontra.initKeys();
 const screenWidth = kontra.getCanvas().width;
 const screenHeight = kontra.getCanvas().height;
 const worldCenter = 4800;
-const farthestTile = 40;
 const tileSize = 20;
+const centralTile = worldCenter / tileSize;
+const farthestTile = 40;
 
 kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
@@ -140,7 +141,6 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		height: 480,
 		calc_ground_tile_color: function(tx, ty) {
 			const sq = k => (k|0) % 2;
-			const centralTile = worldCenter / tileSize;
 			const h = (sq(tx) + sq(ty)) % 2 ? 120 : 90;
 			const d = Math.abs(tx - centralTile) + Math.abs(ty - centralTile);
 			const s = 100 * (1 - Math.min(d / farthestTile, 1));
