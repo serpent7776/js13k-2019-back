@@ -170,10 +170,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		}
 	});
 	let vignette = Sprite({
-		x: screenWidth / 2,
-		y: screenHeight / 2,
-		width: screenWidth,
-		height: screenWidth,
+		x: worldCenter,
+		y: worldCenter,
 		range_counter: 0,
 		anchor: {
 			x: 0.5,
@@ -186,6 +184,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			this.height = screenHeight + delta;
 			this.advance(dt);
 		},
+		render: render_thing,
 	});
 
 	let loop = GameLoop({
@@ -196,10 +195,22 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			vignette.update(dt);
 		},
 		render: function() {
+			context.fillStyle = 'black';
+			context.fillRect(0, 0, screenWidth, screenHeight);
+			context.save();
+			context.beginPath();
+			context.rect(
+				worldCenter - player.x,
+				worldCenter - player.y,
+				screenWidth,
+				screenHeight,
+			);
+			context.clip();
 			ground.render();
 			player.render();
 			skelPool.render();
 			vignette.render();
+			context.restore();
 		},
 	});
 
