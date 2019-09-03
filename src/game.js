@@ -172,6 +172,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	let vignette = Sprite({
 		x: worldCenter,
 		y: worldCenter,
+		size: screenWidth * 1.5,
 		range_counter: 0,
 		anchor: {
 			x: 0.5,
@@ -179,14 +180,16 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		},
 		image: kontra.imageAssets.vignette,
 		update: function(dt) {
-			const delta = 5 * (1 + Math.sin(this.range_counter++ / 20));
-			this.width = screenWidth + delta;
-			this.height = screenHeight + delta;
+			const delta = 1 + 5 * (1 + Math.sin(this.range_counter++ / 20));
+			this.width = this.size + delta;
+			this.height = this.size + delta;
 			this.advance(dt);
 		},
 		render: render_thing,
 	});
 
+	const oversize_x = (vignette.size - screenWidth) / 2;
+	const oversize_y = (vignette.size - screenHeight) / 2;
 	let loop = GameLoop({
 		update: function(dt) {
 			ground.update(dt);
@@ -200,10 +203,10 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			context.save();
 			context.beginPath();
 			context.rect(
-				worldCenter - player.x,
-				worldCenter - player.y,
-				screenWidth,
-				screenHeight,
+				worldCenter - oversize_x - player.x,
+				worldCenter - oversize_y - player.y,
+				vignette.size,
+				vignette.size,
 			);
 			context.clip();
 			ground.render();
