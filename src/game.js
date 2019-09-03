@@ -43,6 +43,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			},
 		},
 	});
+	const max_attack_delay = 3;
 	let player = Sprite({
 		x: worldCenter,
 		y: worldCenter,
@@ -50,6 +51,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		knockback: 256,
 		kx: 0,
 		ky: 0,
+		attack_delay: max_attack_delay,
 		anchor: {
 			x: 0.5,
 			y: 0.5,
@@ -70,6 +72,13 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			if (kontra.keyPressed('right')) {
 				this.dx = this.movement_speed;
 			}
+			if (kontra.keyPressed('space')) {
+				if (this.attack_delay <= 0) {
+					this.attack();
+					this.attack_delay = max_attack_delay;
+				}
+			}
+			this.attack_delay -= dt;
 			this.dx += this.kx;
 			this.dy += this.ky;
 			this.advance(dt);
@@ -86,7 +95,10 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			const vy = dy * k / len;
 			this.kx = vx;
 			this.ky = vy;
-		}
+		},
+		attack: function() {
+			console.log("attack!");
+		},
 	});
 	player.playAnimation('walk');
 	let skelPool = kontra.Pool({
