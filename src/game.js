@@ -109,8 +109,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				attack_range: 1,
 				animations: skeletonSheet.animations,
 				update: function(dt) {
-					const dx = (((player.x - this.x)) / tileSize)|0;
-					const dy = (((player.y - this.y)) / tileSize)|0;
+					const dx = ((player.x - this.x) / tileSize)|0;
+					const dy = ((player.y - this.y) / tileSize)|0;
 					if (Math.abs(dx) >= Math.abs(dy)) {
 						this.dx = dx / Math.abs(dx) * this.movement_speed;
 						this.dy = 0;
@@ -125,9 +125,9 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				},
 				render: render_thing,
 				is_in_range: function(thing) {
-					const dx = (((player.x - this.x)) / tileSize)|0;
-					const dy = (((player.y - this.y)) / tileSize)|0;
-					return Math.abs(dx) + Math.abs(dy) < this.attack_range;
+					const dx = (Math.abs(player.x - this.x) / tileSize)|0;
+					const dy = (Math.abs(player.y - this.y) / tileSize)|0;
+					return dx + dy < this.attack_range;
 				},
 			});
 			skel.playAnimation('walk');
