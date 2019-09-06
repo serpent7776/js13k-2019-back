@@ -11,6 +11,7 @@ const screenWidth = kontra.getCanvas().width;
 const screenHeight = kontra.getCanvas().height;
 const worldCenter = 4800;
 const tileSize = 20;
+const halfTileSize = tileSize / 2;
 const centralTile = worldCenter / tileSize;
 const farthestTile = 40;
 
@@ -97,7 +98,15 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			this.ky = vy;
 		},
 		attack: function() {
-			console.log("attack!");
+			const skels = skelPool.getAliveObjects();
+			for (var i = 0, len = skels.length; i < len; i++) {
+				const skel = skels[i];
+				const dx = (Math.abs(this.x - skel.x) / halfTileSize)|0;
+				const dy = (Math.abs(this.y - skel.y) / halfTileSize)|0;
+				if (dx + dy < 2.5) {
+					skel.ttl = 0;
+				}
+			}
 		},
 	});
 	player.playAnimation('walk');
@@ -136,6 +145,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	});
 	setInterval(() => {
 		skelPool.get({
+			ttl: Infinity,
 			x: worldCenter + 40,
 			y: worldCenter + 40,
 			width: 24,
