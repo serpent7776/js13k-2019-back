@@ -103,7 +103,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				const skel = skels[i];
 				const dx = (Math.abs(this.x - skel.x) / halfTileSize)|0;
 				const dy = (Math.abs(this.y - skel.y) / halfTileSize)|0;
-				if (dx + dy < 2.5) {
+				if (Math.max(dx, dy) < 3) {
 					skel.ttl = 0;
 				}
 			}
@@ -136,7 +136,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				is_in_range: function(thing) {
 					const dx = (Math.abs(player.x - this.x) / tileSize)|0;
 					const dy = (Math.abs(player.y - this.y) / tileSize)|0;
-					return dx + dy < this.attack_range;
+					return Math.max(dx, dy) < this.attack_range;
 				},
 			});
 			skel.playAnimation('walk');
