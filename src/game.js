@@ -14,6 +14,9 @@ const tileSize = 20;
 const halfTileSize = tileSize / 2;
 const centralTile = worldCenter / tileSize;
 const farthestTile = 40;
+const playerAttackRangeTiles = 1.5;
+const playerAttackRangeHalfTiles = 3;
+const skelAttackRangeTiles = 1;
 
 kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 	function render_thing() {
@@ -103,7 +106,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				const skel = skels[i];
 				const dx = (Math.abs(this.x - skel.x) / halfTileSize)|0;
 				const dy = (Math.abs(this.y - skel.y) / halfTileSize)|0;
-				if (Math.max(dx, dy) < 3) {
+				if (Math.max(dx, dy) < playerAttackRangeHalfTiles) {
 					skel.ttl = 0;
 				}
 			}
@@ -115,7 +118,6 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 		create: function() {
 			let skel = Sprite({
 				movement_speed: 32,
-				attack_range: 1,
 				animations: skeletonSheet.animations,
 				update: function(dt) {
 					const dx = ((player.x - this.x) / tileSize)|0;
@@ -136,7 +138,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 				is_in_range: function(thing) {
 					const dx = (Math.abs(player.x - this.x) / tileSize)|0;
 					const dy = (Math.abs(player.y - this.y) / tileSize)|0;
-					return Math.max(dx, dy) < this.attack_range;
+					return Math.max(dx, dy) < skelAttackRangeTiles;
 				},
 			});
 			skel.playAnimation('walk');
