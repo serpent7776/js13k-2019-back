@@ -17,8 +17,9 @@ const farthestTile = 40;
 const playerAttackRangeTiles = 1.5;
 const playerAttackRangeHalfTiles = 3;
 const skelAttackRangeTiles = 1;
+const cloudTtl = 75;
 
-kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
+kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ => {
 	function render_thing() {
 		this.context.save();
 		this.context.translate(-player.x + screenWidth / 2, -player.y + screenHeight / 2);
@@ -78,6 +79,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			}
 			if (kontra.keyPressed('space')) {
 				if (this.attack_delay <= 0) {
+					cloudPool.make_puff();
 					this.attack();
 					this.attack_delay = max_attack_delay;
 				}
@@ -158,6 +160,37 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			},
 		});
 	}, 5000);
+	let cloudPool = kontra.Pool({
+		maxSize: 32,
+		create: function() {
+			return Sprite({
+				image: kontra.imageAssets.cloud,
+				render: render_thing,
+			});
+		},
+	});
+	cloudPool.make_puff = function() {
+		for (var n = 0; n < 8; n++) {
+			const angle = 2 * Math.PI / 8 * n;
+			const dx = 99 * Math.cos(angle);
+			const dy = 99 * Math.sin(angle);
+			const ddx = -99 * Math.cos(angle);
+			const ddy = -99 * Math.sin(angle);
+			this.get({
+				ttl: cloudTtl,
+				x: player.x,
+				y: player.y,
+				dx: dx,
+				dy: dy,
+				ddx: ddx,
+				ddy: ddy,
+				anchor: {
+					x: 0.5,
+					y: 0.5,
+				},
+			});
+		}
+	}
 	let ground = Sprite({
 		x: 0,
 		y: 0,
@@ -219,6 +252,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			ground.update(dt);
 			player.update(dt);
 			skelPool.update(dt);
+			cloudPool.update(dt);
 			vignette.update(dt);
 		},
 		render: function() {
@@ -236,6 +270,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp').then(_ => {
 			ground.render();
 			player.render();
 			skelPool.render();
+			cloudPool.render();
 			vignette.render();
 			context.restore();
 		},
