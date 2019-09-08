@@ -165,6 +165,12 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 		create: function() {
 			return Sprite({
 				image: kontra.imageAssets.cloud,
+				update: function(dt) {
+					const a = 1 - (cloudTtl - this.ttl) / cloudTtl;
+					this.width = 32 * a;
+					this.height = 32 * a;
+					this.advance(dt);
+				},
 				render: render_thing,
 			});
 		},
