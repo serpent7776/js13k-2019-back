@@ -148,10 +148,13 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 		},
 	});
 	setInterval(() => {
+		const angle = 2 * Math.PI * Math.random();
+		const x = worldCenter + vignette.size / 2 * Math.cos(angle);
+		const y = worldCenter + vignette.size / 2 * Math.sin(angle);
 		skelPool.get({
 			ttl: Infinity,
-			x: worldCenter + 40,
-			y: worldCenter + 40,
+			x: x,
+			y: y,
 			width: 24,
 			height: 32,
 			anchor: {
