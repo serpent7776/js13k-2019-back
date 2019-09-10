@@ -15,7 +15,7 @@ const halfTileSize = tileSize / 2;
 const centralTile = worldCenter / tileSize;
 const farthestTile = 40;
 const playerAttackRangeTiles = 1.5;
-const playerAttackRangeHalfTiles = 3;
+const playerAttackRangeHalfTiles = playerAttackRangeTiles * 2;
 const skelAttackRangeTiles = 1;
 const cloudTtl = 75;
 
