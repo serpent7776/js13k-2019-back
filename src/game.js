@@ -4,7 +4,7 @@ let {init, Sprite, GameLoop} = kontra;
 
 let {canvas, context} = init();
 
-kontra.setImagePath('../gfx/');
+kontra.setImagePath('gfx/');
 kontra.initKeys();
 
 const screenWidth = kontra.getCanvas().width;
