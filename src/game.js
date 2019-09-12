@@ -26,6 +26,10 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 		this.draw();
 		this.context.restore();
 	}
+	function playerDead() {
+		console.log("playerDead");
+		clearInterval(skelSpawnIntervalId);
+	}
 	const charsSheet = kontra.SpriteSheet({
 		image: kontra.imageAssets.player,
 		frameWidth: 18,
@@ -106,6 +110,9 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 			this.kx = vx;
 			this.ky = vy;
 			this.lives--;
+			if (this.lives == 0) {
+				playerDead();
+			}
 		},
 		attack: function() {
 			const skels = skelPool.getAliveObjects();
@@ -152,7 +159,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 			return skel;
 		},
 	});
-	setInterval(() => {
+	let skelSpawnIntervalId = setInterval(() => {
 		const angle = 2 * Math.PI * Math.random();
 		const x = worldCenter + vignette.size / 2 * Math.cos(angle);
 		const y = worldCenter + vignette.size / 2 * Math.sin(angle);
