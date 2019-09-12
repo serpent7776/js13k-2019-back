@@ -162,7 +162,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 				y: 0.5,
 			},
 		});
-	}, 5000);
+	}, 750);
 	let cloudPool = kontra.Pool({
 		maxSize: 32,
 		create: function() {
