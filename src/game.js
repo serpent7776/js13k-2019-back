@@ -50,6 +50,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 	});
 	const max_attack_delay = 3;
 	let player = Sprite({
+		lives: 5,
 		x: worldCenter,
 		y: worldCenter,
 		movement_speed: 64,
@@ -92,6 +93,9 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 			this.ky *= 0.9;
 		},
 		render: render_thing,
+		alive: function() {
+			return this.lives > 0;
+		},
 		hit: function(attacker) {
 			const dx = this.x - attacker.x;
 			const dy = this.y - attacker.y;
@@ -101,6 +105,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 			const vy = dy * k / len;
 			this.kx = vx;
 			this.ky = vy;
+			this.lives--;
 		},
 		attack: function() {
 			const skels = skelPool.getAliveObjects();
@@ -259,7 +264,9 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 	let loop = GameLoop({
 		update: function(dt) {
 			ground.update(dt);
-			player.update(dt);
+			if (player.alive()) {
+				player.update(dt);
+			}
 			skelPool.update(dt);
 			cloudPool.update(dt);
 			vignette.update(dt);
@@ -277,7 +284,9 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 			);
 			context.clip();
 			ground.render();
-			player.render();
+			if  (player.alive()) {
+				player.render();
+			}
 			skelPool.render();
 			cloudPool.render();
 			vignette.render();
