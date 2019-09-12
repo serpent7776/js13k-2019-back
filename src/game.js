@@ -134,6 +134,12 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 				movement_speed: 32,
 				animations: skeletonSheet.animations,
 				update: function(dt) {
+					if (!player.alive()) {
+						this.dx = 0;
+						this.dy = 0;
+						this.advance();
+						return;
+					}
 					const dx = ((player.x - this.x) / tileSize)|0;
 					const dy = ((player.y - this.y) / tileSize)|0;
 					if (Math.abs(dx) >= Math.abs(dy)) {
