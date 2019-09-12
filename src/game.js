@@ -30,6 +30,13 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 		console.log("playerDead");
 		clearInterval(skelSpawnIntervalId);
 	}
+	function updateScore() {
+		console.log(`updating score to ${score}`);
+		document.getElementById('score').innerHTML = score;
+	}
+	function updateLives() {
+		document.getElementById('lives').innerHTML = player.lives;
+	}
 	const charsSheet = kontra.SpriteSheet({
 		image: kontra.imageAssets.player,
 		frameWidth: 18,
@@ -53,6 +60,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 		},
 	});
 	const max_attack_delay = 3;
+	let score = 0;
 	let player = Sprite({
 		lives: 5,
 		x: worldCenter,
@@ -113,6 +121,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 			if (this.lives == 0) {
 				playerDead();
 			}
+			updateLives();
 		},
 		attack: function() {
 			const skels = skelPool.getAliveObjects();
@@ -122,6 +131,8 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 				const dy = (Math.abs(this.y - skel.y) / halfTileSize)|0;
 				if (Math.max(dx, dy) < playerAttackRangeHalfTiles) {
 					skel.ttl = 0;
+					score++;
+					updateScore();
 				}
 			}
 		},
@@ -307,5 +318,7 @@ kontra.load('player.bmp', 'vignette.bmp', 'skeleton.bmp', 'cloud.bmp').then(_ =>
 		},
 	});
 
+	updateScore();
+	updateLives();
 	loop.start();
 })
